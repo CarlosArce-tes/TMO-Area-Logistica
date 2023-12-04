@@ -20,15 +20,16 @@ conn = mysql.connector.connect(**db_config)
 cursor = conn.cursor()
 
 # Ruta principal
-@app.route('/')
+@app.route('/index')
 def index():
     # Ejemplo de consulta a la base de datos
     cursor.execute('SELECT * FROM usuarios')
     data = cursor.fetchall()
-    return render_template('index.html', data=data)
+    return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    index()
     if request.method == 'POST':
         usuario = request.form['usuario']
         password = request.form['password']
@@ -53,7 +54,8 @@ def inicio_usuario():
     if 'usuario' in session:
         usuario = session['usuario']
         apellidos = session['apellidos']
-        return render_template('inicio.html', usuario=usuario, apellidos=apellidos)
+        nombre= session['nombre']
+        return render_template('inicio.html', usuario=usuario, apellidos=apellidos, nombre=nombre)
     else:
         return redirect(url_for('login'))
 
@@ -73,7 +75,8 @@ def cerrar():
     session.pop('password', None)
     session.pop('apellidos', None)
     session.pop('nombre', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

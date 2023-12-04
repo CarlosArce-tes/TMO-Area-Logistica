@@ -3,7 +3,46 @@
 {% block title %}Página de Inicio{% endblock %}
 
 {% block content %}
-    <h2>{{usuario}}</h2>
-    <p>Contenido específico para la página de inicio.</p>
+<div class="col-4 col-sm-5 hstack">
+    <div class="mt-5 ms-4 shadow p-3 mb-5 bg-body-tertiary rounded rounded col-6">
+        <div class="">
+            <h3 class=" fs-4 fw-bold user-select-none">Usuario:{{usuario}}</h3>
+            <h6 class="fw-bold user-select-none">{{nombre}} {{apellidos}}</h6>
+        </div>
+    </div>
+    <h6 class="col-sm-10 ms-5 fs-1 text-center fw-bold user-select-none">Buenos dias .... {{nombre}} {{apellidos}}</h6>
+</div>
+
+
+<div class="row">
+    <div class="shadow-lg p-3 mb-5 bg-white rounded rounded list-group ms-5 rounded bg-white col-sm-3">
+        <div class="hstack">
+            <h1 class="fs-1 mt-3 user-select-none">🗺️</h1><a class="ms-4 mt-3 btn bg-white fs-5">Ver papa de entregas de productos</a>
+        </div>
+        <hr>
+        <div class="hstack">
+            <h1 class="fs-1 mt-3 user-select-none">🗺️</h1><a class="ms-4 mt-3 btn bg-white fs-5">Vitacora de galvanizado</a>
+        </div>
+        <hr>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0 ms-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
