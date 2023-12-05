@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Subir Archivo</h1>
+
+    <form action="{{ url_for('agregarPago') }}" method="post" enctype="multipart/form-data">
+        <label for="file">Selecciona un archivo:</label>
+        <input class="form-control bg-primary" type="file" name="file" id="file" required>
+        
+        <label for="estado">Estado (1) Pagado, (0) Sin pagar:</label>
+        <input class="form-control" id="estado" type="number" name="estado" required>
+        
+        <input class="btn btn-success" type="submit" value="Subir Archivo">
+        {% if agregarPago %}
+            <h1>REgistro agrgado exitosamente</h1>
+        {% else %}
+            <h1>Lllena los campos para realizar un registro</h1>
+        {% endif %}
+    </form>
+{% endblock %}

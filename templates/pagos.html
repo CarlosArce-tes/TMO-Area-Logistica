@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Pagos | {{usuario}}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row align-items-center">
+        <h1 class="mt-5">Pagos </h1>
+        <a class="btn bg-secondary col-3 mt-5 mb-5" href="{{url_for('agregarPago')}}">Agregar Pagos</a>
+        <div class=" border rounded shadow p-3 mb-5 bg-body-tertiary rounded ">
+
+            <table class="text-center rounded table table-striped-columns">
+                <thead>
+                    <tr>
+                        <th>ID de Pago</th>
+                        <th>Nombre del archivo</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in pagos %}
+                    <tr>
+                        <td>{{pago[0]}}</td>
+                        <td>{{pago[1]}}</td>
+                        <td>
+                            {% if pago[2] == '1' %}
+                                <h6>Pagado</h6>
+                            {% elif pago[2] == '0' %}
+                                <h6>Sin pagar</h6>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Página de Inicio{% endblock %}
+{% block title %}Inicio | {{nombre}}{% endblock %}
 
 {% block content %}
 <div class="col-4 col-sm-5 hstack">
@@ -21,7 +21,11 @@
         </div>
         <hr>
         <div class="hstack">
-            <h1 class="fs-1 mt-3 user-select-none">🗺️</h1><a class="ms-4 mt-3 btn bg-white fs-5">Vitacora de galvanizado</a>
+            <h1 class="fs-1 mt-3 user-select-none">🧪</h1><a class="ms-4 mt-3 btn bg-white fs-5">Vitacora de galvanizado</a>
+        </div>
+        <hr>
+        <div class="hstack">
+            <h1 class="fs-1 mt-3 user-select-none">💲</h1><a class="ms-4 mt-3 btn bg-white fs-5" href="{{url_for('pagos')}}">Pagos</a>
         </div>
         <hr>
     </div>
