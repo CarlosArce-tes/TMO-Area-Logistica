@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, send_from_directory, session, redirect, url_for
 import mysql.connector
 from werkzeug.utils import secure_filename
 
@@ -130,6 +130,7 @@ def agregarPago():
     conn = get_db_connection()
     cursor = conn.cursor()
 
+
     if request.method == 'POST':
         archivo_pdf = request.files['file']
         estado = request.form['estado']
@@ -142,8 +143,9 @@ def agregarPago():
             # Corregir la consulta SQL y usar una tupla para los valores
             cursor.execute('INSERT INTO Pagos (NombreArchivo, Estatus) VALUES (%s, %s)', (nombre_archivo, estadoint))
             conn.commit()  # Guardar los cambios en la base de datos
+
     close_db_connection(conn, cursor)
     return render_template('agregarPago.html')
-    
+
 if __name__ == '__main__':
     app.run(debug=True)
