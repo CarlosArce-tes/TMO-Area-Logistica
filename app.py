@@ -1,21 +1,32 @@
+
+
+
+
 import os
 from flask import Flask, render_template, request, send_from_directory, session, redirect, url_for, flash
 import mysql.connector
 from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail, Message
-
+#Inicializacion de la aplicacion de Flask
 app = Flask(__name__)
+#Creacion del objeto bootstrap para la aplicacion de estilos
 bootstrap  = Bootstrap(app)
+#Configuracion del servidor de correos
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+#Puerto por default que utiliza el servidor de correos
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'arcecarlos1c@gmail.com'
+#Clave para el envio de correos, se obtien en la autenticacion por dos pasos, sustituirla por la clae correspondiente al correo electronico de la empresa o el usuario administrador
 app.config['MAIL_PASSWORD'] = 'umecsvrpezpqkqbm'
+#inicializacion del servidor de correos de gmail, se puede configurar cualquier servidor sea GMail, Hotmail
 mail = Mail(app)
+#Clave secreta de la aplicaicon, clave de seguridad que solo eladministrador debe conocer
 app.secret_key = 'carlos18'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['CACHE_TYPE'] = 'null'
+#Configuracion del directorio de almacenamiento de archivos
 UPLOAD_FOLDER = 'static'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Configuración de la base de datos
@@ -26,10 +37,10 @@ db_config = {
     'database': 'seguiorden',
 }
 
-
+#Funcion de conexion a la base de datos MySQL
 def get_db_connection():
     return mysql.connector.connect(**db_config)
-
+#Cierre de conexion de la base de datos MySQL
 def close_db_connection(conn, cursor):
     cursor.close()
     conn.close()
@@ -37,37 +48,47 @@ def close_db_connection(conn, cursor):
 # Ruta principal
 @app.route('/index')
 def index():
+    #Creacion de objetos para la conexion a la base de datos en esta tura
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Ejemplo de consulta a la base de datos
     cursor.execute('SELECT * FROM usuarios')
     data = cursor.fetchall()
-
+    #Cierre de la conexion a la base de datos
     close_db_connection(conn, cursor)
 
     return render_template('index.html')
 
-
+'''
+En el login, se hacen peticiones, get y post necesarios para la autenticacion
+'''
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #Conexion a la Base de Datos 
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    #Se llama a la funcio index, la encargada de hacer la consulta de usuarios para la validacion y login en esta ruta
     index()  # Llamar a la función index para crear conexión y cursor
 
     error = None
 
     if request.method == 'POST':
+        #Peticion de las claves de acceso del usuario para poder ingresar a la pagina principal
         usuario = request.form['usuario']
         password = request.form['password']
+        #Seleccion de los datos del usuario necesarios para esta ruta, e este caso la informacion del usuario que se presentara o para las operaciones dentro de la plataforma, se pasa 
+        #como parametros el usuario y la contraseña del usuario
         cursor.execute("SELECT id, usuario, password, apellidos, nombre FROM usuarios WHERE usuario = %s AND password = %s", (usuario, password))
-
+        #Se condiciona que solo se devuelva un resultado de la consulta
         usuario_data = cursor.fetchone()
+        #Si se obtuvo un resultado igual a la consulta se alamacena en la variable usuario_data, se condiciona si son existentes en la base de datos, en caso de que si procede al almacenamiento de los datos del usuario resultante de las consultas
         if usuario_data is None:
+            #Credenciales invalidas
             error = 'Usuario o contraseña incorrectos'
             print(error)
         elif usuario_data:
+            #Almacenamiento de la informacion del usuario en varibles que se podran utilizar durante la sesion
             session['id'] = usuario_data[0]
             session['usuario'] = usuario_data[1]
             session['password'] = usuario_data[2]
@@ -88,7 +109,9 @@ def login():
                 print('Correo no enviado')
                 
             '''
+            #Redireccion a la pagina de inicio
             return redirect(url_for('inicio_usuario'))
+    
     close_db_connection(conn, cursor)
 
     return render_template('login.html', error=error)
@@ -120,14 +143,6 @@ def entregas():
         return redirect(url_for('login'))
 
 
-@app.route('/cerrar')
-def cerrar():
-    session.pop('id', None)
-    session.pop('usuario', None)
-    session.pop('password', None)
-    session.pop('apellidos', None)
-    session.pop('nombre', None)
-    return redirect(url_for('index'))
 
 
 @app.route('/pagos')
@@ -168,6 +183,15 @@ def agregarPago():
     close_db_connection(conn, cursor)
     
     return render_template('agregarPago.html' )
+@app.route('/cerrar')
+def cerrar():
+    session.pop('id', None)
+    session.pop('usuario', None)
+    session.pop('password', None)
+    session.pop('apellidos', None)
+    session.pop('nombre', None)
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
