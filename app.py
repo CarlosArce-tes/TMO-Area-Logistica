@@ -1,10 +1,18 @@
 import os
-from flask import Flask, render_template, request, send_from_directory, session, redirect, url_for
+from flask import Flask, render_template, request, send_from_directory, session, redirect, url_for, flash
 import mysql.connector
 from werkzeug.utils import secure_filename
-
+from flask_bootstrap import Bootstrap
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+bootstrap  = Bootstrap(app)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'arcecarlos1c@gmail.com'
+app.config['MAIL_PASSWORD'] = 'umecsvrpezpqkqbm'
+mail = Mail(app)
 app.secret_key = 'carlos18'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['CACHE_TYPE'] = 'null'
@@ -66,8 +74,21 @@ def login():
             session['apellidos'] = usuario_data[3]
             session['nombre'] = usuario_data[4]
             close_db_connection(conn, cursor)
+            '''
+            correo = 'yanetalmazan0512@gmail.com'
+            from_email = 'arcecarlos1c@gmail.com'
+            to_email= correo
+            subject= ' Iniciaste Sesion en La aplicacion de la tienda'
+            message= 'Nuevo inicio de Sesion en un Dispositivo, Manten cuidado con tus sesiones para evitar problemas en la plataforma'
+            msg= Message(subject=subject, sender=from_email, recipients=[to_email], body=message)
+            try:
+                mail.send(msg)
+                print('Correo enviado')
+            except Exception as e:
+                print('Correo no enviado')
+                
+            '''
             return redirect(url_for('inicio_usuario'))
-
     close_db_connection(conn, cursor)
 
     return render_template('login.html', error=error)
@@ -143,9 +164,10 @@ def agregarPago():
             # Corregir la consulta SQL y usar una tupla para los valores
             cursor.execute('INSERT INTO Pagos (NombreArchivo, Estatus) VALUES (%s, %s)', (nombre_archivo, estadoint))
             conn.commit()  # Guardar los cambios en la base de datos
-
+            flash('El pago se agregó correctamente.', 'success')
     close_db_connection(conn, cursor)
-    return render_template('agregarPago.html')
+    
+    return render_template('agregarPago.html' )
 
 if __name__ == '__main__':
     app.run(debug=True)
