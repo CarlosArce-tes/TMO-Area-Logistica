@@ -18,7 +18,7 @@ Troquelados Modulares S.A de C.V, San Miguel de La Victoria, Estado de Mexico, M
 
 
 import os
-from flask import Flask, render_template, request, send_from_directory, session, redirect, url_for, flash
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 import mysql.connector
 from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
