@@ -1,4 +1,19 @@
+'''
+---------------------------------------------------------------------------------------------------------------------------
+Creacion e implementacion de una API para el area de Planeacion y logistica.
+Troquelados Modulares S.A de C.V, San Miguel de La Victoria, Estado de Mexico, Mexico
+---------------------------------------------------------------------------------------------------------------------------
+* Autor: Arce Hernandez Carlos Eduardo
+* Version: 1.0
+* Version de Python: 3.11.6
+* Virtualenv: venv
+* SO: Arch Linux
+* Kernel: 6.6.4-arch1-1
+* GitHub: CarlosArce-tes
+* Correo Electronico: arcecarlos1c@gmail.com
 
+---------------------------------------------------------------------------------------------------------------------------
+'''
 
 
 
