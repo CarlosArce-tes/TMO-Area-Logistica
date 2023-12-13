@@ -23,8 +23,10 @@ import mysql.connector
 from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail, Message
+from flask_cors import CORS
 #Inicializacion de la aplicacion de Flask
 app = Flask(__name__)
+CORS(app, origins="*")
 #Creacion del objeto bootstrap para la aplicacion de estilos
 bootstrap  = Bootstrap(app)
 #Configuracion del servidor de correos
@@ -205,8 +207,9 @@ def cerrar():
     session.pop('password', None)
     session.pop('apellidos', None)
     session.pop('nombre', None)
+    
     return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
