@@ -183,22 +183,23 @@ def agregarPago():
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    if 'usuario' in session:
+        if request.method == 'POST':
+            archivo_pdf = request.files['file']
+            estado = request.form['estado']
+            estadoint = int(estado)
 
-    if request.method == 'POST':
-        archivo_pdf = request.files['file']
-        estado = request.form['estado']
-        estadoint = int(estado)
-
-        if archivo_pdf:
-            nombre_archivo = secure_filename(archivo_pdf.filename)
-            archivo_pdf.save(os.path.join(app.config['UPLOAD_FOLDER'], nombre_archivo))
-            
-            # Corregir la consulta SQL y usar una tupla para los valores
-            cursor.execute('INSERT INTO Pagos (NombreArchivo, Estatus) VALUES (%s, %s)', (nombre_archivo, estadoint))
-            conn.commit()  # Guardar los cambios en la base de datos
-            flash('El pago se agregó correctamente.', 'success')
-    close_db_connection(conn, cursor)
-    
+            if archivo_pdf:
+                nombre_archivo = secure_filename(archivo_pdf.filename)
+                archivo_pdf.save(os.path.join(app.config['UPLOAD_FOLDER'], nombre_archivo))
+                
+                # Corregir la consulta SQL y usar una tupla para los valores
+                cursor.execute('INSERT INTO Pagos (NombreArchivo, Estatus) VALUES (%s, %s)', (nombre_archivo, estadoint))
+                conn.commit()  # Guardar los cambios en la base de datos
+                flash('El pago se agregó correctamente.', 'success')
+        close_db_connection(conn, cursor)
+    else: 
+        return redirect(url_for('login'))
     return render_template('agregarPago.html' )
 @app.route('/cerrar')
 def cerrar():
