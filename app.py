@@ -72,7 +72,6 @@ def index():
     #Creacion de objetos para la conexion a la base de datos en esta tura
     conn = get_db_connection()
     cursor = conn.cursor()
-
     # Ejemplo de consulta a la base de datos
     cursor.execute('SELECT * FROM usuarios')
     data = cursor.fetchall()
@@ -80,7 +79,6 @@ def index():
     close_db_connection(conn, cursor)
 
     return render_template('index.html')
-
 '''
 En el login, se hacen peticiones, get y post necesarios para la autenticacion
 '''
@@ -269,7 +267,11 @@ def preview_file(filename):
 
     # Si no es un tipo de archivo compatible, muestra un mensaje genérico
     return 'Vista previa no disponible para este tipo de archivo.'
+'''
+Cierre de sesion
 
+Eliminacion de variables de sesion, y redireccion a la ruta index
+'''
 
 @app.route('/cerrar')
 def cerrar():

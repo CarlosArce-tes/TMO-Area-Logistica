@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
-
 {% block title %}Archivos | Logistica{% endblock %}
-
 {% block content %}
 <div class="mt-5">
     <h1 class="mt-5 ms-5">Archivos en el directorio static</h1>
@@ -11,7 +9,6 @@
                 <input type="text" class="ms-5 form-control rounded-pill border-dark" placeholder="Buscar archivo..." id="searchInput" name="search">
             </div>
         </div>
-
     </form>
     <a class="fs-4" href="{{ url_for('inicio_usuario') }}">Ir a Inicio</a>
     <div class="d-flex flex-wrap mt-3" id="filesContainer">
@@ -31,9 +28,7 @@
         {% endfor %}
     </div>
 </div>
-
 <script>
-
     document.getElementById('searchInput').addEventListener('keyup', function() {
         const searchValue = this.value.toLowerCase();
         const filesContainer = document.getElementById('filesContainer');
