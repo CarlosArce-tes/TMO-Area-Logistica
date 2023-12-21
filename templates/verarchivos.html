@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Archivos | Logistica{% endblock %}
+
+{% block content %}
+<div class="mt-5">
+    <h1>Archivos en el directorio static</h1>
+        {% for file in files %}
+            <div class="card text-center" style="width: 18rem;">
+                <h1 class="fs-1"><📄</h1>
+                <div class="card-body">
+                    <a href="{{ static_dir }}/{{ file }}" target="_blank">{{ file }}</a>
+                </div>
+              </div>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

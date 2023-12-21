@@ -200,6 +200,14 @@ def agregarPago():
     else: 
         return redirect(url_for('login'))
     return render_template('agregarPago.html' )
+
+@app.route('/verarchivos', methods=['GET', 'POST'])
+def verarchivos():
+    static_dir = 'static'
+    files = os.listdir(static_dir)
+    return render_template('verarchivos.html', files=files, static_dir=static_dir)
+
+
 @app.route('/cerrar')
 def cerrar():
     session.pop('id', None)
