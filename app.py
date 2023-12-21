@@ -17,13 +17,17 @@ Troquelados Modulares S.A de C.V, San Miguel de La Victoria, Estado de Mexico, M
 
 
 
+import csv
 import os
+from PyPDF2 import PdfReader
+from docx import Document
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 import mysql.connector
 from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail, Message
 from flask_cors import CORS
+
 #Inicializacion de la aplicacion de Flask
 app = Flask(__name__)
 CORS(app, origins="*")
@@ -204,21 +208,11 @@ def agregarPago():
 @app.route('/verarchivos', methods=['GET', 'POST'])
 def verarchivos():
     static_dir = 'static'
-    all_files = os.listdir(static_dir)
-
-    # Manejar la búsqueda si se envió un formulario POST
-    if request.method == 'POST':
-        search_term = request.form.get('search', '').lower()
-        if search_term:
-            files = [file for file in all_files if search_term in file.lower()]
-        else:
-            files = all_files
-    else:
-        files = all_files
-
+    files = os.listdir(static_dir)
     return render_template('verarchivos.html', files=files, static_dir=static_dir)
 
 
+ 
 @app.route('/eliminar_archivo/<filename>', methods=['GET', 'POST'])
 def eliminar_archivo(filename):
     static_dir = 'static'
@@ -226,6 +220,56 @@ def eliminar_archivo(filename):
     if os.path.exists(file_path):
         os.remove(file_path)
     return redirect(url_for('verarchivos'))
+
+@app.route('/verarchivos/preview/<filename>')
+def preview_file(filename):
+    static_dir = 'static'
+    file_path = os.path.join(static_dir, filename)
+
+    # Verifica si el archivo es una imagen
+    if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+        return f'<img src="{file_path}" style="max-width: 100%; height: auto;">'
+    
+    # Si el archivo es de texto, muestra un fragmento del contenido
+    elif filename.lower().endswith('.txt'):
+        with open(file_path, 'r') as file:
+            content = file.read()
+            return f'<pre>{content[:200]}</pre>'  # Muestra los primeros 200 caracteres como vista previa
+
+    # Si el archivo es un CSV, muestra una tabla con los primeros 5 registros
+    elif filename.lower().endswith('.csv'):
+        with open(file_path, 'r') as file:
+            csv_reader = csv.reader(file)
+            table_html = '<table>'
+            for i, row in enumerate(csv_reader):
+                if i >= 5:  # Limita la vista previa a los primeros 5 registros
+                    break
+                table_html += '<tr>'
+                for column in row:
+                    table_html += f'<td>{column}</td>'
+                table_html += '</tr>'
+            table_html += '</table>'
+            return table_html
+
+    # Si el archivo es un DOCX, muestra el contenido como texto
+    elif filename.lower().endswith('.docx'):
+        doc = Document(file_path)
+        doc_text = '\n'.join([paragraph.text for paragraph in doc.paragraphs])
+        return doc_text
+
+    # Si el archivo es un PDF, muestra el número de páginas y el título
+    elif filename.lower().endswith('.pdf'):
+        pdf = PdfReader(file_path)
+        return f'Número de páginas: {len(pdf.pages)}, Título: {pdf.get_outlines()[0].title}'
+
+    # Si el archivo es un PPTX, muestra el número de diapositivas y el título
+
+
+    # Agrega más casos según el tipo de archivo que quieras previsualizar
+
+    # Si no es un tipo de archivo compatible, muestra un mensaje genérico
+    return 'Vista previa no disponible para este tipo de archivo.'
+
 
 @app.route('/cerrar')
 def cerrar():
