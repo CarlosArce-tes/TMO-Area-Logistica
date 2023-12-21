@@ -9,8 +9,8 @@ Troquelados Modulares S.A de C.V, San Miguel de La Victoria, Estado de Mexico, M
 * Virtualenv: venv
 * SO: Arch Linux
 * Kernel: 6.6.4-arch1-1
-* GitHub: CarlosArce-tes
-* Correo Electronico: arcecarlos1c@gmail.com
+* GitHub: https://github.com/CarlosArce-tes/TMO-Area-Logistica.git 
+* Correo Electronico: arcecarlos1c@gmail.com 
 
 ---------------------------------------------------------------------------------------------------------------------------
 '''
@@ -128,7 +128,6 @@ def login():
             '''
             #Redireccion a la pagina de inicio
             return redirect(url_for('inicio_usuario'))
-    
     close_db_connection(conn, cursor)
 
     return render_template('login.html', error=error)
@@ -214,3 +213,4 @@ def cerrar():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
+    
