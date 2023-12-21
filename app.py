@@ -200,13 +200,32 @@ def agregarPago():
     else: 
         return redirect(url_for('login'))
     return render_template('agregarPago.html' )
-
+#Ruta de visualizacion de archivos
 @app.route('/verarchivos', methods=['GET', 'POST'])
 def verarchivos():
     static_dir = 'static'
-    files = os.listdir(static_dir)
+    all_files = os.listdir(static_dir)
+
+    # Manejar la búsqueda si se envió un formulario POST
+    if request.method == 'POST':
+        search_term = request.form.get('search', '').lower()
+        if search_term:
+            files = [file for file in all_files if search_term in file.lower()]
+        else:
+            files = all_files
+    else:
+        files = all_files
+
     return render_template('verarchivos.html', files=files, static_dir=static_dir)
 
+
+@app.route('/eliminar_archivo/<filename>', methods=['GET', 'POST'])
+def eliminar_archivo(filename):
+    static_dir = 'static'
+    file_path = os.path.join(static_dir, filename)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    return redirect(url_for('verarchivos'))
 
 @app.route('/cerrar')
 def cerrar():
