@@ -219,58 +219,16 @@ def eliminar_archivo(filename):
         os.remove(file_path)
     return redirect(url_for('verarchivos'))
 
-@app.route('/verarchivos/preview/<filename>')
-def preview_file(filename):
-    static_dir = 'static'
-    file_path = os.path.join(static_dir, filename)
-
-    # Verifica si el archivo es una imagen
-    if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-        return f'<img src="{file_path}" style="max-width: 100%; height: auto;">'
-    
-    # Si el archivo es de texto, muestra un fragmento del contenido
-    elif filename.lower().endswith('.txt'):
-        with open(file_path, 'r') as file:
-            content = file.read()
-            return f'<pre>{content[:200]}</pre>'  # Muestra los primeros 200 caracteres como vista previa
-
-    # Si el archivo es un CSV, muestra una tabla con los primeros 5 registros
-    elif filename.lower().endswith('.csv'):
-        with open(file_path, 'r') as file:
-            csv_reader = csv.reader(file)
-            table_html = '<table>'
-            for i, row in enumerate(csv_reader):
-                if i >= 5:  # Limita la vista previa a los primeros 5 registros
-                    break
-                table_html += '<tr>'
-                for column in row:
-                    table_html += f'<td>{column}</td>'
-                table_html += '</tr>'
-            table_html += '</table>'
-            return table_html
-
-    # Si el archivo es un DOCX, muestra el contenido como texto
-    elif filename.lower().endswith('.docx'):
-        doc = Document(file_path)
-        doc_text = '\n'.join([paragraph.text for paragraph in doc.paragraphs])
-        return doc_text
-
-    # Si el archivo es un PDF, muestra el número de páginas y el título
-    elif filename.lower().endswith('.pdf'):
-        pdf = PdfReader(file_path)
-        return f'Número de páginas: {len(pdf.pages)}, Título: {pdf.get_outlines()[0].title}'
-
-    # Si el archivo es un PPTX, muestra el número de diapositivas y el título
-
-
-    # Agrega más casos según el tipo de archivo que quieras previsualizar
-
-    # Si no es un tipo de archivo compatible, muestra un mensaje genérico
-    return 'Vista previa no disponible para este tipo de archivo.'
 '''
 Cierre de sesion
 
 Eliminacion de variables de sesion, y redireccion a la ruta index
+---------------------
+OBSERVACIONES
+---------------------
+
+Correccion de cierre de sesion ya que aun con el boton de regreso del navegador se restaura la sesion 
+y se puede acceder a cualquiera ruta escrubiendola en la URL
 '''
 
 @app.route('/cerrar')
