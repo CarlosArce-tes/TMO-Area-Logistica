@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div class="row align-items-center">
-        
+
         <h1 class="mt-5">Pagos </h1>
         <a class="fs-4" href="{{url_for('inicio_usuario')}}">Ir a Inicio</a>
         <a class="btn bg-secondary col-3 mt-5 mb-5" href="{{url_for('agregarPago')}}">Agregar Pagos</a>
@@ -22,19 +22,20 @@
                     <tr>
                         <td>{{pago[0]}}</td>
                         <td>{{pago[1]}}</td>
-                        <td>
-                            {% if pago[2] == '1' %}
-                                <h6>Pagado</h6>
-                            {% elif pago[2] == '0' %}
-                                <h6>Sin pagar</h6>
+                        {% if pago[2] == '1' %}
+                        <td class="bg-success">
+                            <h6 class="">Pagado</h6>
+                            {% else %}
+                        <td class="bg-danger">
+                            <h6 class="">No Pagado</h6>
                             {% endif %}
-                        </td>
                     </tr>
                     {% endfor %}
+
                 </tbody>
             </table>
         </div>
-        
+
     </div>
 </div>
 

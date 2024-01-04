@@ -15,7 +15,10 @@ Troquelados Modulares S.A de C.V, San Miguel de La Victoria, Estado de Mexico, M
 ---------------------------------------------------------------------------------------------------------------------------
 '''
 
-
+'''
+Implementacion de lectura de documentos
+Lectura de PDF
+'''
 
 import csv
 import os
@@ -67,7 +70,7 @@ def close_db_connection(conn, cursor):
     conn.close()
 
 # Ruta principal
-@app.route('/index')
+@app.route('/')
 def index():
     #Creacion de objetos para la conexion a la base de datos en esta tura
     conn = get_db_connection()
@@ -198,18 +201,29 @@ def agregarPago():
                 cursor.execute('INSERT INTO Pagos (NombreArchivo, Estatus) VALUES (%s, %s)', (nombre_archivo, estadoint))
                 conn.commit()  # Guardar los cambios en la base de datos
                 flash('El pago se agregó correctamente.', 'success')
+                return redirect('pagos')
         close_db_connection(conn, cursor)
+        
     else: 
         return redirect(url_for('login'))
     return render_template('agregarPago.html' )
 #Ruta de visualizacion de archivos
+'''
+Implementacion de la visualizacion de archivos, como las facturas de pagos 
+Posteriormente, se integrara para que estos archivos, se almacenen y se envien por correo a su respectiva area
+'''
 @app.route('/verarchivos', methods=['GET', 'POST'])
 def verarchivos():
     static_dir = 'static'
     files = os.listdir(static_dir)
     return render_template('verarchivos.html', files=files, static_dir=static_dir)
 
-
+'''
+Implementacion de eliminacion de archivos en caso de ser necesarios, estos documentos
+seran administrados por planeacion y logistica y el area de contabilidad contara con
+una copia que sera enviada por correo a dicha area, asi teniendo un respaldo de dichos
+documentos para poder ser consultados y sin perdida de informacion.
+'''
  
 @app.route('/eliminar_archivo/<filename>', methods=['GET', 'POST'])
 def eliminar_archivo(filename):
@@ -219,7 +233,8 @@ def eliminar_archivo(filename):
         os.remove(file_path)
     return redirect(url_for('verarchivos'))
 
-#hola mundo
+
+
 '''
 Cierre de sesion
 
