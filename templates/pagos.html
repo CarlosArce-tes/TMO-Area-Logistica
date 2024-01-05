@@ -1,43 +1,43 @@
 {% extends 'base.html' %}
-{% block title %}Pagos | {{usuario}}{% endblock %}
+{% block title %}Pagos | {{ usuario }}{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row align-items-center">
-
-        <h1 class="mt-3 fw-bold fs-1">Pagos </h1>
-        <a class="fs-4 link-underline link-underline-opacity-0 text-secondary" href="{{url_for('inicio_usuario')}}">Ir a Inicio</a>
-        <a class="btn bg-secondary col-3 mt-5 mb-5" href="{{url_for('agregarPago')}}">Agregar Pagos</a>
-        <div class=" border rounded shadow p-3 mb-5 bg-body-tertiary rounded ">
-
-            <table class="text-center rounded table table-bordered table-striped-columns">
-                <thead>
-                    <tr>
-                        <th class="fs-4">ID de Pago</th>
-                        <th class="fs-4">Nombre del archivo</th>
-                        <th class="fs-4">Estado</th>
-                    </tr>
-                </thead>
-                <tbody style="max-height: 300px; overflow-y: auto;">
-                    {% for pago in pagos %}
-                    <tr>
-                        <td>{{pago[0]}}</td>
-                        <td>{{pago[1]}}</td>
-                        {% if pago[2] == '1' %}
-                        <td class="bg-success">
-                            <h6 class="">Pagado</h6>
+        <h1 class="mt-5 fw-bold fs-1">Pagos </h1>
+        <a class="fs-4 link-underline link-underline-opacity-0 text-secondary" href="{{ url_for('inicio_usuario') }}">Ir a Inicio</a>
+        <a class="btn bg-secondary col-3 mt-5 mb-5" href="{{ url_for('agregarPago') }}">Agregar Pagos</a>
+        <div class="border rounded shadow p-3 mb-5 bg-body-tertiary rounded ">
+            <div class="table-container" style="max-height: 500px; overflow-y: auto;">
+                <table class="text-center rounded table table-bordered table-striped-columns">
+                    <thead>
+                        <tr class="shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                            <th class="fs-4" style="position: sticky; top: 0; z-index: 0;">ID de Pago</th>
+                            <th class="fs-4" style="position: sticky; top: 0; z-index: 0;">Nombre del archivo</th>
+                            <th class="fs-4" style="position: sticky; top: 0; z-index: 0;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pago in pagos %}
+                        <tr>
+                            <td>{{ pago[0] }}</td>
+                            <td>{{ pago[1] }}</td>
+                            {% if pago[2] == '1' %}
+                            <td class="bg-success">
+                                <h6 class="">Pagado</h6>
+                            </td>
                             {% else %}
-                        <td class="bg-danger">
-                            <h6 class="">No Pagado</h6>
+                            <td class="bg-danger">
+                                <h6 class="">No Pagado</h6>
+                            </td>
                             {% endif %}
-                    </tr>
-                    {% endfor %}
-
-                </tbody>
-            </table>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            
         </div>
-
     </div>
 </div>
-
-
 {% endblock %}

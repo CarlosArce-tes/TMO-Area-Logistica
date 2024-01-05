@@ -21,6 +21,7 @@ Lectura de PDF
 '''
 
 import csv
+import datetime
 import os
 from PyPDF2 import PdfReader
 from docx import Document
@@ -30,7 +31,7 @@ from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail, Message
 from flask_cors import CORS
-
+from datetime import datetime
 #Inicializacion de la aplicacion de Flask
 app = Flask(__name__)
 CORS(app, origins="*")
@@ -90,6 +91,10 @@ def index():
     
 
     return render_template('index.html')
+@app.route('/contrasena', methods=['GET', 'POST'])
+def contrasena():
+    return render_template('contraseña.html')
+
 '''
 En el login, se hacen peticiones, get y post necesarios para la autenticacion
 '''
@@ -152,7 +157,9 @@ def inicio_usuario():
         usuario = session['usuario']
         apellidos = session['apellidos']
         nombre = session['nombre']
-        return render_template('inicio.html', usuario=usuario, apellidos=apellidos, nombre=nombre)
+        actual = datetime.now().hour
+        print(actual)
+        return render_template('inicio.html', usuario=usuario, apellidos=apellidos, nombre=nombre, actual=actual)
     else:
         return redirect(url_for('login'))
 
