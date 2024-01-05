@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cerrar Sesión</title>
+    <script>
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+    </script>
+</head>
+<body>
+    <p>Cerrando sesión...</p>
+</body>
+</html>

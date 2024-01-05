@@ -24,7 +24,7 @@ import csv
 import os
 from PyPDF2 import PdfReader
 from docx import Document
-from flask import Flask, render_template, request, session, redirect, url_for, flash
+from flask import Flask, render_template, request, session, redirect, url_for, flash, Response
 import mysql.connector
 from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
@@ -54,12 +54,19 @@ app.config['CACHE_TYPE'] = 'null'
 UPLOAD_FOLDER = 'static'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Configuración de la base de datos
+'''db_config = {
+    'host': 'db4free.net',
+    'user': 'carlostmo',
+    'password': 'carlos18',
+    'database': 'carlostmomysql',
+}'''
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
     'password': 'carlos18',
     'database': 'seguiorden',
 }
+
 
 #Funcion de conexion a la base de datos MySQL
 def get_db_connection():
@@ -80,6 +87,7 @@ def index():
     data = cursor.fetchall()
     #Cierre de la conexion a la base de datos
     close_db_connection(conn, cursor)
+    
 
     return render_template('index.html')
 '''
@@ -249,15 +257,15 @@ y se puede acceder a cualquiera ruta escrubiendola en la URL
 
 @app.route('/cerrar')
 def cerrar():
+    # Clear session variables
     session.pop('id', None)
     session.pop('usuario', None)
     session.pop('password', None)
     session.pop('apellidos', None)
     session.pop('nombre', None)
     
+    # Redirect to the index page
     return redirect(url_for('index'))
-
-
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
     
