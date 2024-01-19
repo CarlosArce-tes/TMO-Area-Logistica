@@ -20,23 +20,21 @@ Implementacion de lectura de documentos
 Lectura de PDF
 '''
 
-import csv
+
 import datetime
 import os
-from PyPDF2 import PdfReader
-from docx import Document
 from flask import Flask, render_template, request, session, redirect, url_for, flash, Response
 import mysql.connector
-from werkzeug.utils import secure_filename
-from flask_bootstrap import Bootstrap
+from werkzeug.utils import secure_filename  
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from datetime import datetime
+from datetime import timedelta
 #Inicializacion de la aplicacion de Flask
 app = Flask(__name__)
 CORS(app, origins="*")
 #Creacion del objeto bootstrap para la aplicacion de estilos
-bootstrap  = Bootstrap(app)
+
 #Configuracion del servidor de correos
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 #Puerto por default que utiliza el servidor de correos
@@ -49,8 +47,8 @@ app.config['MAIL_PASSWORD'] = 'umecsvrpezpqkqbm'
 mail = Mail(app)
 #Clave secreta de la aplicaicon, clave de seguridad que solo eladministrador debe conocer
 app.secret_key = 'carlos18'
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.config['CACHE_TYPE'] = 'null'
+app.permanent_session_lifetime = timedelta(minutes=1)
+
 #Configuracion del directorio de almacenamiento de archivos
 UPLOAD_FOLDER = 'static'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -88,6 +86,7 @@ def index():
     data = cursor.fetchall()
     #Cierre de la conexion a la base de datos
     close_db_connection(conn, cursor)
+    
     
 
     return render_template('index.html')
@@ -153,6 +152,7 @@ def login():
 
 @app.route('/inicio_usuario')
 def inicio_usuario():
+    
     if 'usuario' in session:
         usuario = session['usuario']
         apellidos = session['apellidos']
@@ -270,6 +270,8 @@ def cerrar():
     session.pop('password', None)
     session.pop('apellidos', None)
     session.pop('nombre', None)
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+    app.config['CACHE_TYPE'] = 'null'
     
     # Redirect to the index page
     return redirect(url_for('index'))

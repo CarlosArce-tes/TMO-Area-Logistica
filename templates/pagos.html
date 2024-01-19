@@ -19,15 +19,18 @@
                     <tbody>
                         {% for pago in pagos %}
                         <tr>
-                            <td>{{ pago[0] }}</td>
-                            <td>{{ pago[1] }}</td>
+                            
                             {% if pago[2] == '1' %}
+                            <td class="bg-success">{{ pago[0] }}</td>
+                            <td class="bg-success">{{ pago[1] }}</td>
                             <td class="bg-success">
-                                <h6 class="">Pagado</h6>
+                                <h6 class="text-white fw-bold">Pagado</h6>
                             </td>
                             {% else %}
+                            <td class="bg-danger">{{ pago[0] }}</td>
+                            <td class="bg-danger">{{ pago[1] }}</td>
                             <td class="bg-danger">
-                                <h6 class="">No Pagado</h6>
+                                <h6 class="text-white fw-bold">No Pagado</h6>
                             </td>
                             {% endif %}
                         </tr>
